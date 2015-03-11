@@ -46,6 +46,9 @@ func (p *FileWriter) CreateDir() error {
 	return os.MkdirAll(p.dir, os.ModePerm)
 }
 
+func (p *FileWriter) Dir(dir string) {
+	p.dir = dir
+}
 func (p *FileWriter) Prefix(prefix string) {
 	p.prefix = prefix
 }
