@@ -1,7 +1,11 @@
 # golog
 golang log modules
+输出格式类似于
+[2015-03-11 22:23:05][log_test.go:46][ERROR] me
+
+
+1. file log
 文件log的时候，可以设置文件大小，当超过大小的时候会重新换一个文件，还有可以设置最大保留天数
-1.file log
 ```
 package main
 import(
@@ -16,7 +20,8 @@ func main(){
     log.Debug("%s", "me")
     }
 ```
-2. console
+
+2. console 有颜色的打印
 ```
 package main
 import(
@@ -25,6 +30,9 @@ import(
 func main(){ 
     writer := NewConsoleWriter()
     log := New(writer)
-    log.Debug("%s", "me")
+    log.Error("%s", "me")
     }
 ```
+
+
+
