@@ -40,6 +40,8 @@ func TestCallDepth(t *testing.T) {
 func TestConsole(t *testing.T) {
 	writer := NewConsoleWriter()
 	log := New(writer)
+	log.SetCallDepth(2)
+	log.SetLevel(LERROR)
 	log.Debug("%s", "me")
 	log.Error("%s", "me")
 	log.Info("%s", "me")
