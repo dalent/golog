@@ -1,6 +1,7 @@
 # golog
 golang log modules
 输出格式类似于
+
 [2015-03-11 22:23:05][log_test.go:46][ERROR] me
 
 
@@ -12,10 +13,10 @@ import(
   "github.com/dalent/golog"
 )
 func main(){ 
-     writer := NewFileWriter()
+     writer := golog.NewFileWriter()
      writer.Prefix("appname")//默认是undefined，表示文件前缀
-    log := New(writer)
-    log.SetLevel(golog.WARN)  //最小纪录日志级别
+    log := golog.New(writer)
+    log.SetLevel(golog.LDEBUG)  //最小纪录日志级别
     log.SetCallDepth(2)    //纪录调用的该函数的文件与行数
     log.Debug("%s", "me")
     }
@@ -28,8 +29,8 @@ import(
   "github.com/dalent/golog"
 )
 func main(){ 
-    writer := NewConsoleWriter()
-    log := New(writer)
+    writer := golog.NewConsoleWriter()
+    log := golog.New(writer)
     log.Error("%s", "me")
     }
 ```
