@@ -39,6 +39,9 @@ func New(logger Writer) *GoLog {
 }
 
 func (p *GoLog) SetLevel(level int) {
+	if level > LERROR || level < DEBUG {
+		panic("level error")
+	}
 	p.level = level
 }
 

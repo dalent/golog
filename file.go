@@ -21,7 +21,7 @@ const (
 const (
 	DEFAULT_MAX_DAYS = 7
 	//DEFAULT_FILE_SIZE  = 500 * MB
-	DEFAULT_FILE_SIZE  = 500 * B
+	DEFAULT_FILE_SIZE  = 200 * MB
 	DEDAULT_LINE_WIDTH = 120 * B
 	DEFAULT_DIR        = "logs"
 	SUFFIX             = ".log"
