@@ -59,7 +59,7 @@ func BenchmarkLog(B *testing.B) {
 	file := NewFileWriter()
 	file.startLogger()
 	file.MaxDays(1)
-	file.MaxLogSize(1000 * KB)
+	file.MaxLogSize(1000 * gKB)
 	for i := 0; i < B.N; i++ {
 		file.writeMsg("test")
 	}

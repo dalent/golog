@@ -14,7 +14,7 @@ const (
 	LINFO
 	LERROR
 	//LFATAL   no fatal
-	FROM_TIME = "2006-01-02 15:04:05"
+	gFROM_TIME = "2006-01-02 15:04:05"
 )
 
 var gLevelName = []string{"RESET", "DEBUG", "WARN", "INFO", "ERROR"}
@@ -74,7 +74,7 @@ func (p *GoLog) writeString(level int, msg string) {
 
 	p.writer.writeMsg(
 		fmt.Sprintf("[%s]%s[%s%s%s] %s\n",
-			time.Now().Format(FROM_TIME),
+			time.Now().Format(gFROM_TIME),
 			strCall,
 			p.writer.color(level),
 			gLevelName[level],

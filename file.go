@@ -11,21 +11,21 @@ import (
 )
 
 const (
-	B = 1 << (iota * 10)
-	KB
-	MB
-	GB
-	TB
+	gB = 1 << (iota * 10)
+	gKB
+	gMB
+	gGB
+	gTB
 )
 
 const (
-	DEFAULT_MAX_DAYS = 7
+	gDEFAULT_MAX_DAYS = 7
 	//DEFAULT_FILE_SIZE  = 500 * MB
-	DEFAULT_FILE_SIZE  = 200 * MB
-	DEDAULT_LINE_WIDTH = 120 * B
-	DEFAULT_DIR        = "logs"
-	SUFFIX             = ".log"
-	PREFIX             = "undefined_"
+	gDEFAULT_FILE_SIZE  = 200 * gMB
+	gDEDAULT_LINE_WIDTH = 120 * gB
+	gDEFAULT_DIR        = "logs"
+	gSUFFIX             = ".log"
+	gPREFIX             = "undefined_"
 )
 
 type FileWriter struct {
@@ -35,11 +35,11 @@ type FileWriter struct {
 	dir          string
 	prefix       string
 	suffix       string
-	writer       *FileMux
+	writer       *fileMux
 }
 
 func NewFileWriter() *FileWriter {
-	return &FileWriter{DEFAULT_FILE_SIZE, DEFAULT_MAX_DAYS, DEDAULT_LINE_WIDTH, DEFAULT_DIR, PREFIX, SUFFIX, new(FileMux)}
+	return &FileWriter{gDEFAULT_FILE_SIZE, gDEFAULT_MAX_DAYS, gDEDAULT_LINE_WIDTH, gDEFAULT_DIR, gPREFIX, gSUFFIX, new(fileMux)}
 }
 
 func (p *FileWriter) createDir() error {
@@ -159,12 +159,12 @@ func (p *FileWriter) writeMsg(msg string) {
 	p.checkFile()
 }
 
-type FileMux struct {
+type fileMux struct {
 	sync.Mutex
 	fd *os.File
 }
 
-func (p *FileMux) initFd(fd *os.File) {
+func (p *fileMux) initFd(fd *os.File) {
 	p.Lock()
 	defer p.Unlock()
 	if p.fd != nil {
@@ -174,7 +174,7 @@ func (p *FileMux) initFd(fd *os.File) {
 
 	p.fd = fd
 }
-func (p *FileMux) flush() {
+func (p *fileMux) flush() {
 	if p.fd != nil {
 		p.Lock()
 		defer p.Unlock()
@@ -182,7 +182,7 @@ func (p *FileMux) flush() {
 	}
 }
 
-func (p *FileMux) size() (int64, error) {
+func (p *fileMux) size() (int64, error) {
 	p.Lock()
 	defer p.Unlock()
 	if p.fd != nil {
@@ -193,7 +193,7 @@ func (p *FileMux) size() (int64, error) {
 	return 0, errors.New("fd not exist")
 }
 
-func (p *FileMux) writeString(msg string) {
+func (p *fileMux) writeString(msg string) {
 	p.Lock()
 	defer p.Unlock()
 	if p.fd != nil {
