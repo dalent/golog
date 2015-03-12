@@ -32,9 +32,9 @@ import (
 
 func TestLog(t *testing.T) {
 	file := NewFileWriter()
-	file.StartLogger()
+	file.startLogger()
 	file.MaxDays(1)
-	file.WriteMsg("test")
+	file.writeMsg("test")
 	if file.writer.fd == nil {
 		t.Fatal("fd nil")
 	}
@@ -57,11 +57,11 @@ func TestLog(t *testing.T) {
 
 func BenchmarkLog(B *testing.B) {
 	file := NewFileWriter()
-	file.StartLogger()
+	file.startLogger()
 	file.MaxDays(1)
 	file.MaxLogSize(1000 * KB)
 	for i := 0; i < B.N; i++ {
-		file.WriteMsg("test")
+		file.writeMsg("test")
 	}
 
 	os.RemoveAll(file.dir)

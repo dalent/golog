@@ -42,7 +42,7 @@ func NewFileWriter() *FileWriter {
 	return &FileWriter{DEFAULT_FILE_SIZE, DEFAULT_MAX_DAYS, DEDAULT_LINE_WIDTH, DEFAULT_DIR, PREFIX, SUFFIX, new(FileMux)}
 }
 
-func (p *FileWriter) CreateDir() error {
+func (p *FileWriter) createDir() error {
 	return os.MkdirAll(p.dir, os.ModePerm)
 }
 
@@ -65,11 +65,11 @@ func (p *FileWriter) MaxDays(days int64) {
 	p.maxDays = days
 }
 
-func (p *FileWriter) Flush() {
-	p.writer.Flush()
+func (p *FileWriter) flush() {
+	p.writer.flush()
 }
 
-func (p *FileWriter) OpenFile() error {
+func (p *FileWriter) openFile() error {
 	fileNamePre := fmt.Sprintf("%s/%s%s%s",
 		p.dir,
 		p.prefix,
@@ -97,16 +97,16 @@ func (p *FileWriter) OpenFile() error {
 			return err
 		}
 
-		p.writer.InitFd(fd)
+		p.writer.initFd(fd)
 
 		break
 	}
 
-	p.DeleteOldFile()
+	p.deleteOldFile()
 	return nil
 }
 
-func (p *FileWriter) DeleteOldFile() {
+func (p *FileWriter) deleteOldFile() {
 	filepath.Walk(p.dir, func(path string, info os.FileInfo, err error) (returnErr error) {
 		defer func() {
 			if r := recover(); r != nil {
@@ -123,27 +123,27 @@ func (p *FileWriter) DeleteOldFile() {
 	})
 }
 
-func (p *FileWriter) StartLogger() {
-	err := p.CreateDir()
+func (p *FileWriter) startLogger() {
+	err := p.createDir()
 	if err != nil {
 		panic("dir create failed: " + err.Error())
 	}
 
-	err = p.OpenFile()
+	err = p.openFile()
 	if err != nil {
 		panic("open file failed: " + err.Error())
 	}
 }
 
-func (p *FileWriter) CheckFile() {
-	size, err := p.writer.Size()
+func (p *FileWriter) checkFile() {
+	size, err := p.writer.size()
 	if err != nil {
 		fmt.Println("get log file size error:", err)
 		return
 	}
 
 	if size > p.maxLogSize {
-		err = p.OpenFile()
+		err = p.openFile()
 		if err != nil {
 			fmt.Println("rotate log file  error:", err)
 			return
@@ -151,12 +151,12 @@ func (p *FileWriter) CheckFile() {
 	}
 }
 
-func (p *FileWriter) Color(_ int) string {
+func (p *FileWriter) color(_ int) string {
 	return ""
 }
-func (p *FileWriter) WriteMsg(msg string) {
-	p.writer.WriteString(msg)
-	p.CheckFile()
+func (p *FileWriter) writeMsg(msg string) {
+	p.writer.writeString(msg)
+	p.checkFile()
 }
 
 type FileMux struct {
@@ -164,7 +164,7 @@ type FileMux struct {
 	fd *os.File
 }
 
-func (p *FileMux) InitFd(fd *os.File) {
+func (p *FileMux) initFd(fd *os.File) {
 	p.Lock()
 	defer p.Unlock()
 	if p.fd != nil {
@@ -174,7 +174,7 @@ func (p *FileMux) InitFd(fd *os.File) {
 
 	p.fd = fd
 }
-func (p *FileMux) Flush() {
+func (p *FileMux) flush() {
 	if p.fd != nil {
 		p.Lock()
 		defer p.Unlock()
@@ -182,7 +182,7 @@ func (p *FileMux) Flush() {
 	}
 }
 
-func (p *FileMux) Size() (int64, error) {
+func (p *FileMux) size() (int64, error) {
 	p.Lock()
 	defer p.Unlock()
 	if p.fd != nil {
@@ -193,7 +193,7 @@ func (p *FileMux) Size() (int64, error) {
 	return 0, errors.New("fd not exist")
 }
 
-func (p *FileMux) WriteString(msg string) {
+func (p *FileMux) writeString(msg string) {
 	p.Lock()
 	defer p.Unlock()
 	if p.fd != nil {

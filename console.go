@@ -16,27 +16,22 @@ var (
 )
 
 type ConsoleWriter struct {
-	lg    *log.Logger
-	level int
+	lg *log.Logger
 }
 
 func NewConsoleWriter() *ConsoleWriter {
-	return &ConsoleWriter{log.New(colorable.NewColorableStdout(), "", 0), LDEBUG}
+	return &ConsoleWriter{log.New(colorable.NewColorableStdout(), "", 0)}
 }
 
-func (p *ConsoleWriter) SetLevel(level int) {
-	p.level = level
-}
-func (p *ConsoleWriter) StartLogger() {
+func (p *ConsoleWriter) startLogger() {
 }
 
-func (p *ConsoleWriter) WriteMsg(msg string) {
+func (p *ConsoleWriter) writeMsg(msg string) {
 	p.lg.Printf(msg)
 }
 
-func (p *ConsoleWriter) Color(level int) string {
+func (p *ConsoleWriter) color(level int) string {
 	return color[level]
 }
-func (p *ConsoleWriter) Flush() {
-	p.Flush()
+func (p *ConsoleWriter) flush() {
 }

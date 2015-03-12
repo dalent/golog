@@ -26,20 +26,20 @@ type GoLog struct {
 }
 
 type Writer interface {
-	Color(int) string
-	StartLogger()
-	WriteMsg(msg string)
-	Flush()
+	color(int) string
+	startLogger()
+	writeMsg(msg string)
+	flush()
 }
 
 func New(logger Writer) *GoLog {
-	logger.StartLogger()
+	logger.startLogger()
 	goLog := &GoLog{LDEBUG, 0, logger}
 	return goLog
 }
 
 func (p *GoLog) SetLevel(level int) {
-	if level > LERROR || level < DEBUG {
+	if level > LERROR || level < LDEBUG {
 		panic("level error")
 	}
 	p.level = level
@@ -72,13 +72,13 @@ func (p *GoLog) writeString(level int, msg string) {
 		strCall = fmt.Sprintf("[%s:%d]", file, line)
 	}
 
-	p.writer.WriteMsg(
+	p.writer.writeMsg(
 		fmt.Sprintf("[%s]%s[%s%s%s] %s\n",
 			time.Now().Format(FROM_TIME),
 			strCall,
-			p.writer.Color(level),
+			p.writer.color(level),
 			gLevelName[level],
-			p.writer.Color(RESET),
+			p.writer.color(RESET),
 			msg,
 		))
 }

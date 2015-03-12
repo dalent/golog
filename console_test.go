@@ -6,6 +6,6 @@ import (
 
 func TestCon(t *testing.T) {
 	console := NewConsoleWriter()
-	console.StartLogger()
-	console.WriteMsg("test")
+	console.startLogger()
+	console.writeMsg("test")
 }
