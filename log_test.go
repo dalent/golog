@@ -46,4 +46,5 @@ func TestConsole(t *testing.T) {
 	log.Error("%s", "me")
 	log.Info("%s", "me")
 	log.Warn("%s", "me")
+	log.Fatal("%s", "me")
 }

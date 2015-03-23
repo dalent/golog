@@ -13,11 +13,11 @@ const (
 	LWARN
 	LINFO
 	LERROR
-	//LFATAL   no fatal
+	LFATAL     //no fatal
 	gFROM_TIME = "2006-01-02 15:04:05"
 )
 
-var gLevelName = []string{"RESET", "DEBUG", "WARN", "INFO", "ERROR"}
+var gLevelName = []string{"RESET", "DEBUG", "WARN", "INFO", "ERROR", "FATAL"}
 
 type GoLog struct {
 	level     int
@@ -39,7 +39,7 @@ func New(logger Writer) *GoLog {
 }
 
 func (p *GoLog) SetLevel(level int) {
-	if level > LERROR || level < LDEBUG {
+	if level > LFATAL || level < LDEBUG {
 		panic("level error")
 	}
 	p.level = level
@@ -94,4 +94,7 @@ func (p *GoLog) Warn(format string, msg ...interface{}) {
 }
 func (p *GoLog) Debug(format string, msg ...interface{}) {
 	p.writeString(LDEBUG, fmt.Sprintf(format, msg...))
+}
+func (p *GoLog) Fatal(format string, msg ...interface{}) {
+	p.writeString(LFATAL, fmt.Sprintf(format, msg...))
 }
